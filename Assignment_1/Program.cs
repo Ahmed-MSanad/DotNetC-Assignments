@@ -1,4 +1,4 @@
-﻿namespace Assignment_1
+namespace Assignment_1
 {
     internal class Program
     {
