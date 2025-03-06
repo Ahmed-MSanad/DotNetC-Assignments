@@ -8,9 +8,17 @@ namespace Assignment_1.Models
     [PrimaryKey("Ins_Id", "Course_Id")]
     public class Course_Ins
     {
-        public int Ins_Id { get; set; }
+        // Instructor -(M)- Gives -(M)- Course =>
+        [ForeignKey("Course")]
         public int Course_Id { get; set; }
+        public Course Course { get; set; }
+        [ForeignKey("Instructor")]
+        public int Ins_Id { get; set; }
+        public Instructor Instructor { get; set; }
+
         [Required]
         public string Evaluate { get; set; }
+
+
     }
 }

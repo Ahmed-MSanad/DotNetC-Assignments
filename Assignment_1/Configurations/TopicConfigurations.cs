@@ -17,6 +17,11 @@ namespace Assignment_1.Configurations
             builder.Property(x => x.Name)
                    .IsRequired()
                    .HasMaxLength(100);
+
+            // Course -(M)- Belongs to -(1)- Topic =>
+            builder.HasMany(x => x.Courses)
+                   .WithOne(x => x.Topic)
+                   .HasForeignKey(x => x.Top_Id);
         }
     }
 }

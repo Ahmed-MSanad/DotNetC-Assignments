@@ -11,8 +11,13 @@ namespace Assignment_1.Models
     public class Stud_Course
     {
         public int Stud_Id { get; set; }
+        public Student Student { get; set; }
+
         public int Course_Id { get; set; }
+        public Course Course { get; set; }
+
         [Range(0, 100)]
         public double Grade { get; set; }
+
     }
 }

@@ -4,6 +4,7 @@ using Assignment_1;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assignment_1.Migrations
 {
     [DbContext(typeof(CompanyDbContext))]
-    partial class CompanyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250306082428_OneToManyDepartmentInstructorRelation")]
+    partial class OneToManyDepartmentInstructorRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,8 +48,6 @@ namespace Assignment_1.Migrations
 
                     b.HasKey("CourseId");
 
-                    b.HasIndex("Top_Id");
-
                     b.ToTable("courses");
                 });
 
@@ -64,8 +65,6 @@ namespace Assignment_1.Migrations
 
                     b.HasKey("Ins_Id", "Course_Id");
 
-                    b.HasIndex("Course_Id");
-
                     b.ToTable("Course_Ins");
                 });
 
@@ -80,7 +79,7 @@ namespace Assignment_1.Migrations
                     b.Property<DateOnly>("HiringDate")
                         .HasColumnType("date");
 
-                    b.Property<int?>("Ins_Id")
+                    b.Property<int>("Ins_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -89,8 +88,6 @@ namespace Assignment_1.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("deptId");
-
-                    b.HasIndex("Ins_Id");
 
                     b.ToTable("departments");
                 });
@@ -202,45 +199,6 @@ namespace Assignment_1.Migrations
                     b.ToTable("topics");
                 });
 
-            modelBuilder.Entity("Assignment_1.Models.Course", b =>
-                {
-                    b.HasOne("Assignment_1.Models.Topic", "Topic")
-                        .WithMany("Courses")
-                        .HasForeignKey("Top_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Topic");
-                });
-
-            modelBuilder.Entity("Assignment_1.Models.Course_Ins", b =>
-                {
-                    b.HasOne("Assignment_1.Models.Course", "Course")
-                        .WithMany("Course_Ins")
-                        .HasForeignKey("Course_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Assignment_1.Models.Instructor", "Instructor")
-                        .WithMany("Course_Ins")
-                        .HasForeignKey("Ins_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Instructor");
-                });
-
-            modelBuilder.Entity("Assignment_1.Models.Department", b =>
-                {
-                    b.HasOne("Assignment_1.Models.Instructor", "Instructor")
-                        .WithMany("Departments")
-                        .HasForeignKey("Ins_Id");
-
-                    b.Navigation("Instructor");
-                });
-
             modelBuilder.Entity("Assignment_1.Models.Instructor", b =>
                 {
                     b.HasOne("Assignment_1.Models.Department", "Department")
@@ -282,8 +240,6 @@ namespace Assignment_1.Migrations
 
             modelBuilder.Entity("Assignment_1.Models.Course", b =>
                 {
-                    b.Navigation("Course_Ins");
-
                     b.Navigation("Stud_Courses");
                 });
 
@@ -294,21 +250,9 @@ namespace Assignment_1.Migrations
                     b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("Assignment_1.Models.Instructor", b =>
-                {
-                    b.Navigation("Course_Ins");
-
-                    b.Navigation("Departments");
-                });
-
             modelBuilder.Entity("Assignment_1.Models.Student", b =>
                 {
                     b.Navigation("Stud_Courses");
-                });
-
-            modelBuilder.Entity("Assignment_1.Models.Topic", b =>
-                {
-                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

@@ -35,6 +35,21 @@ namespace Assignment_1.Models
 
         public double HourRate { get; set; }
 
+
+        // Department -(1)- has -(M)- instructor =>
+        [ForeignKey("Department")]
         public int Dep_Id { get; set; }
+        [ForeignKey("Dep_Id")]
+        public Department Department { get; set; }
+
+
+        // instructor -(1)- manage -(M)- Department =>
+        [InverseProperty("Instructor")]
+        public ICollection<Department> Departments { get; set; }
+
+
+        // Instructor -(M)- Gives -(M)- Course =>
+        [InverseProperty("Instructor")]
+        public ICollection<Course_Ins> Course_Ins { get; set; }
     }
 }

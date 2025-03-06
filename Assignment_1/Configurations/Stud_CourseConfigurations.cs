@@ -15,7 +15,13 @@ namespace Assignment_1.Configurations
         {
             builder.HasKey(x => new { x.Stud_Id, x.Course_Id });
 
-            builder.Property(x => x.Grade);
+            builder.HasOne(x => x.Course)
+                   .WithMany(x => x.Stud_Courses)
+                   .HasForeignKey(x => x.Course_Id);
+
+            builder.HasOne(x => x.Student)
+                   .WithMany(x => x.Stud_Courses)
+                   .HasForeignKey(x => x.Stud_Id);
         }
     }
 }

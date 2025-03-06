@@ -13,6 +13,14 @@ namespace Assignment_1
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            // 1-M -> Student-Department:
+            modelBuilder.Entity<Department>()
+                        .HasMany(x => x.Students)
+                        .WithOne(x => x.Department)
+                        .HasForeignKey(x => x.Dep_Id);
+
+
         }
         public DbSet<Student> students { get; set; }
         public DbSet<Course> courses { get; set; }

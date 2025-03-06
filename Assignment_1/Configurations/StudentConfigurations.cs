@@ -27,6 +27,12 @@ namespace Assignment_1.Configurations
                    .HasDefaultValue("unKnown")
                    .HasColumnName("Student_Address")
                    .HasColumnType(SqlServerTypes.varchar50); // is safe more than writing it many times
+
+            //------- 1-M : Student - Department
+
+            builder.HasOne(x => x.Department)
+                   .WithMany(x => x.Students)
+                   .HasForeignKey(x => x.Dep_Id);
         }
     }
 }
