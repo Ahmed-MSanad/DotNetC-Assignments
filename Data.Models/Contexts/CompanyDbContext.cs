@@ -19,6 +19,7 @@ namespace Company.Data.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            //modelBuilder.Entity<BaseEntity>().HasQueryFilter((x) => !x.isDeleted);
             base.OnModelCreating(modelBuilder);
         }
 

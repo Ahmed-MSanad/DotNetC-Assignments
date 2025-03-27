@@ -1,62 +1,66 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using Company.Data.Models;
 using Company.Repository.Interfaces;
 using Company.Repository.Repositories;
 using Company.Service.Interfaces.IDepartment;
+using Company.Service.Services.DepartmentService.Dto;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Company.Service.Services.DepartmentService
 {
     public class DepartmentService : IDepartmentService
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public DepartmentService(IDepartmentRepository departmentRepository)
+        public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _departmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
-        public void Add(Department department)
+        public void Add(DepartmentDto department)
         {
-            var mappedDepartment = new Department
-            {
-                Name = department.Name,
-                Code = department.Code,
-                CreateAt = department.CreateAt
-            };
-            _departmentRepository.Add(mappedDepartment);
-        }
-
-        public void Delete(Department department)
-        {
-            _departmentRepository.Delete(department);
+            //Department mappedDepartment = _mapper.Map<DepartmentDto, Department>(department);
+            Department mappedDepartment = _mapper.Map<Department>(department);
+            _unitOfWork.DepartmentRepository.Add(mappedDepartment);
+            // May do some other stuff here before saving
+            // Then save :
+            _unitOfWork.Complete();
         }
 
-        public IEnumerable<Department> GetAll()
+        public void Delete(DepartmentDto department)
         {
-            var deprtments = _departmentRepository.GetAll();
-            return deprtments;
+            Department mappedDepartment = _mapper.Map<Department>(department);
+            _unitOfWork.DepartmentRepository.Delete(mappedDepartment);
+            // May do some other stuff here before saving
+            // Then save :
+            _unitOfWork.Complete();
         }
 
-        public Department GetById(int? id)
+        public IEnumerable<DepartmentDto> GetAll()
+        {
+            var departments = _unitOfWork.DepartmentRepository.GetAll();
+            IEnumerable<DepartmentDto> mappedDepartment = _mapper.Map<IEnumerable<DepartmentDto>>(departments);
+            return mappedDepartment;
+        }
+
+        public DepartmentDto GetById(int? id)
         {
             if (id is null)
                 return null;
             
-            var department = _departmentRepository.GetById(id.Value);
+            var department = _unitOfWork.DepartmentRepository.GetById(id.Value);
+            DepartmentDto mappedDepartment = _mapper.Map<DepartmentDto>(department);
 
-            if(department is null)
+            if (department is null)
                 return null;
 
-            return department;
+            return mappedDepartment;
         }
 
-        public void Update(Department department)
+        public void Update(DepartmentDto department)
         {
-            var departmentToUpdate = _departmentRepository.GetById(department.Id);
+            var departmentToUpdate = _unitOfWork.DepartmentRepository.GetById(department.Id);
 
             if (department.Name != departmentToUpdate.Name && GetAll().Any(x => x.Name == department.Name))
             {
@@ -66,7 +70,10 @@ namespace Company.Service.Services.DepartmentService
             departmentToUpdate.Name = department.Name;
             departmentToUpdate.Code = department.Code;
 
-            _departmentRepository.Update(departmentToUpdate);
+            _unitOfWork.DepartmentRepository.Update(departmentToUpdate);
+            // May do some other stuff here before saving
+            // Then save :
+            _unitOfWork.Complete();
         }
     }
 }
