@@ -1,0 +1,36 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Company.Web.styles.css" asp-append-version="true" />
+    <!-- FontAwesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="d-flex align-items-center justify-content-center vh-100 mb-0"
+      style="background: linear-gradient(to bottom, #6a11cb, #2575fc);">
+
+    <div class="card shadow p-4 text-center text-white"
+         style="max-width: 400px; width: 100%; background: linear-gradient(to bottom, #8E2DE2, #4A00E0);">
+
+        <!-- Generic Logo -->
+        <img src="https://cdn-icons-png.flaticon.com/512/3442/3442301.png"
+            class="img-fluid mx-auto d-block mb-3" style="width: 80px; filter: invert(1);" alt="Generic Logo">
+
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+</body>
+</html>

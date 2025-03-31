@@ -1,4 +1,5 @@
 using Company.Data.Contexts;
+using Company.Data.Models;
 using Company.Repository.Interfaces;
 using Company.Repository.Repositories;
 using Company.Service.Interfaces.IDepartment;
@@ -6,6 +7,7 @@ using Company.Service.Interfaces.IEmployee;
 using Company.Service.Mapping;
 using Company.Service.Services.DepartmentService;
 using Company.Service.Services.EmployeeService;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.Web
@@ -34,6 +36,35 @@ namespace Company.Web
             builder.Services.AddAutoMapper(x => x.AddProfile(new EmployeeProfile()));
             builder.Services.AddAutoMapper(x => x.AddProfile(new DepartmentProfile()));
 
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            {
+                config.Password.RequiredUniqueChars = 2;
+                config.Password.RequireUppercase = true;
+                config.Password.RequireLowercase = true;
+                config.Password.RequireDigit = true;
+                config.Password.RequireNonAlphanumeric = true;
+                config.Password.RequiredLength = 6;
+                config.User.RequireUniqueEmail = true;
+                config.Lockout.AllowedForNewUsers = true;
+                config.Lockout.MaxFailedAccessAttempts = 4;
+                config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(1);
+            }).AddEntityFrameworkStores<CompanyDbContext>()
+              .AddDefaultTokenProviders();
+
+            // 
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;                             // prevent cross side scripting attacks -> as it allows only cookie access from http requests and not JS or another script
+                options.ExpireTimeSpan = TimeSpan.FromHours(1);       // how long this cookie will stay in user browser.
+                options.SlidingExpiration = true;
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.Cookie.Name = "admin";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+            });
+
 
             var app = builder.Build();
 
@@ -52,9 +83,12 @@ namespace Company.Web
 
             app.UseAuthorization();
 
+            app.UseAuthentication();
+
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=SignUp}"
+            );
 
             app.Run();
         }

@@ -1,0 +1,57 @@
+﻿@model SignUpViewModel
+@{
+    ViewData["Title"] = "SignUp";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<h1 class="fw-bold text-capitalize">SignUp</h1>
+
+<form asp-action="SignUp" asp-controller="Account" method="post">
+
+    <!-- First Name -->
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label"></label>
+        <input asp-for="FirstName" class="form-control">
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+
+    <!-- Last Name -->
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label"></label>
+        <input asp-for="LastName" class="form-control">
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+
+    <!-- Email -->
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" type="email" class="form-control">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <!-- Password -->
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" type="password" class="form-control">
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="mb-3">
+        <label asp-for="ConfirmPassword" class="form-label"></label>
+        <input asp-for="ConfirmPassword" type="password" class="form-control">
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <!-- Agree to Terms -->
+    <div class="form-check mb-3">
+        <input asp-for="isAgree" type="checkbox" class="form-check-input">
+        <label asp-for="isAgree" class="form-check-label">I agree to the terms</label>
+        <span asp-validation-for="isAgree" class="text-danger d-block"></span>
+    </div>
+
+    <!-- Register Button -->
+    <button type="submit" class="btn btn-light w-100 rounded-pill text-dark">Register</button>
+</form>
+
+<p class="text-white">Have an account? <a asp-action="LogIn">Login Now</a></p>
