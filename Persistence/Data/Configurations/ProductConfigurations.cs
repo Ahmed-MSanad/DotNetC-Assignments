@@ -15,6 +15,9 @@ namespace Persistence.Data.Configurations
             builder.HasOne(P => P.ProductType)
                     .WithMany()
                     .HasForeignKey(p => p.TypeId);
+
+            builder.Property(p => p.Price)
+                    .HasColumnType("decimal(10,2)");
         }
     }
 }

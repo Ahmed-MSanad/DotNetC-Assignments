@@ -28,8 +28,17 @@ namespace Persistence.Repositories
             return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
         }
 
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Specification<TEntity> specifications)
+            => await ApplySpecification(specifications).ToListAsync();
+        public async Task<TEntity?> GetAsync(Specification<TEntity> specifications)
+            => await ApplySpecification(specifications).FirstOrDefaultAsync();
+
+        private IQueryable<TEntity> ApplySpecification(Specification<TEntity> specifications)
+            => SpecificationEvaluator.GetQuery(_context.Set<TEntity>(), specifications);
+
         public async Task<TEntity?> GetAsync(TKey id)
             => await _context.Set<TEntity>().FindAsync(id);
+
 
         public void Update(TEntity entity)
             => _context.Set<TEntity>().Update(entity);
