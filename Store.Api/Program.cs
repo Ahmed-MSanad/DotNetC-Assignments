@@ -1,5 +1,6 @@
 
 using System.Reflection.Metadata;
+using System.Text.Json.Serialization;
 using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -20,7 +21,10 @@ namespace Store.Api
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
