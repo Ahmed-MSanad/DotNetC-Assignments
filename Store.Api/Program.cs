@@ -1,15 +1,16 @@
 
-using System.Reflection.Metadata;
 using System.Text.Json.Serialization;
 using Domain.Contracts;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Data;
 using Persistence.Repositories;
 using Services;
 using Services.Abstraction;
-using Services.MappingProfiles;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using StackExchange.Redis;
+using Store.Api.Factories;
+using Store.Api.MiddleWares;
 
 namespace Store.Api
 {
@@ -34,10 +35,21 @@ namespace Store.Api
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
             });
 
+            builder.Services.AddSingleton<IConnectionMultiplexer>(
+                _ => ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis"))
+            );
+
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = ApiResponseFactory.CustomValidationErrorResponse;
+            });
+
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddScoped<IServiceManager, ServiceManager>();
+
+            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
 
             //builder.Services.AddAutoMapper(typeof(AssemblyReference).Assembly); // XX Not Working
@@ -51,10 +63,11 @@ namespace Store.Api
             //builder.Services.AddAutoMapper(typeof(Services.ServiceManager).Assembly);
 
 
-
             var app = builder.Build();
 
             await SeedDbAsync(app);
+
+            app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Services.Abstraction;
 using Shared;
+using Shared.ErrorModels;
 using Shared.ProductDtos;
 
 namespace Presentation.Controllers
@@ -16,6 +18,8 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        //[ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)] // We sat it globally already.
+        [ProducesResponseType(typeof(ProductResultDto), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<ProductResultDto>> GetProduct(int id)
         {
             var product = await serviceManager.ProductService.GetProductByIdAsync(id);
