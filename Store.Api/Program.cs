@@ -1,10 +1,4 @@
-using Domain.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using Services;
-using Services.Abstraction;
-using Shared.IdentityDtos;
 using Store.Api.Extensions;
-using Store.Api.Factories;
 using Store.Api.MiddleWares;
 
 namespace Store.Api

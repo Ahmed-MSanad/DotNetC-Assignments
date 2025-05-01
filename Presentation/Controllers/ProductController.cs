@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstraction;
 using Shared;
@@ -7,6 +8,7 @@ using Shared.ProductDtos;
 
 namespace Presentation.Controllers
 {
+    [Authorize]
     public class ProductController(IServiceManager serviceManager) : ApiController
     {
         [HttpGet]
