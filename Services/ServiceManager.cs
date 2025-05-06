@@ -18,6 +18,7 @@ namespace Services
             _productService = new Lazy<IProductService>(() => new ProductService(unitOfWork, mapper));
             _basketService = new Lazy<IBasketService>(() => new BasketService(basketRepository, mapper));
             _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(userManager, mapper, options));
+            _orderService = new Lazy<IOrderService>(() => new OrderService(unitOfWork, mapper, basketRepository));
         }
 
         private readonly Lazy<IProductService> _productService;
@@ -30,5 +31,9 @@ namespace Services
 
         private readonly Lazy<IAuthenticationService> _authenticationService;
         public IAuthenticationService AuthenticationService => _authenticationService.Value;
+
+
+        private readonly Lazy<IOrderService> _orderService;
+        public IOrderService OrderService => _orderService.Value;
     }
 }
