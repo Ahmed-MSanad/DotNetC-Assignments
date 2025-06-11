@@ -8,7 +8,7 @@ namespace Services.Abstraction
         public Task<UserResultDto> RegisterAsync(RegisterDto registerDto);
         public Task<UserResultDto> GetUserByEmailAsync(string email);
         public Task<bool> isEmailExistAsync(string email);
-        public Task<AddressDto> GetUserAddressAsync(string email);
-        public Task<AddressDto> UpdateUserAddressAsync(string email, AddressDto addressDto);
+        public Task<IdentityAddressDto> GetUserAddressAsync(string email);
+        public Task<IdentityAddressDto> UpdateUserAddressAsync(string email, IdentityAddressDto addressDto);
     }
 }

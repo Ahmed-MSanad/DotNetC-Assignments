@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Attributes;
 using Services.Abstraction;
 using Shared;
 using Shared.ErrorModels;
@@ -12,6 +13,7 @@ namespace Presentation.Controllers
     public class ProductController(IServiceManager serviceManager) : ApiController
     {
         [HttpGet]
+        [RedisCache(120)]
         public async Task<ActionResult<PaginatedResult<ProductResultDto>>> GetAllProducts([FromQuery] ProductSpecificationParams specs)
         {
             var products = await serviceManager.ProductService.GetAllProductsAsync(specs);
@@ -30,6 +32,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [RedisCache(120)]
         public async Task<ActionResult<BrandResultDto>> GetAllBrands()
         {
             var brands = await serviceManager.ProductService.GetAllBrandsAsync();
@@ -38,6 +41,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [RedisCache(120)]
         public async Task<ActionResult<TypeResultDto>> GetAllTypes()
         {
             var types = await serviceManager.ProductService.GetAllTypesAsync();

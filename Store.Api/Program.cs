@@ -15,7 +15,6 @@ namespace Store.Api
 
             builder.Services.AddPresentationServices();
 
-
             var app = builder.Build();
 
             await app.SeedDbAsync();
